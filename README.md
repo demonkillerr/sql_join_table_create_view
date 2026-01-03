@@ -15,13 +15,14 @@ All commands assume we are in `/home/dk/code/SQL/table_union_view` and have `sql
   ```sh
   sqlite3 bank_transactions.db "SELECT transaction_date, amount, currency, reference_number FROM third_party LIMIT 5;"
   ```
+
 - Export the view as JSON for hand-off:
   ```sh
   sqlite3 bank_transactions.db <<'EOF'
-.mode json
-.output third_party.json
-SELECT transaction_date, amount, currency, reference_number FROM third_party;
-EOF
+  .mode json
+  .output third_party.json
+  SELECT transaction_date, amount, currency, reference_number FROM third_party;
+  EOF
   ```
 
 ## `bank_transactions_union_view`
