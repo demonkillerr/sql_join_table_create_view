@@ -14,7 +14,18 @@ All commands assume we are in `/home/dk/code/SQL/table_union_view` and have `sql
   sqlite3 bank_transactions.db "SELECT COUNT(*) FROM bank_transactions_alt;"
   ```
 
-## 2. Table union
+## 2. Query data from tables
+- Query every thing
+  ```sh
+  sqlite3 bank_transactions.db "SELECT * FROM bank_transactions"
+  ```
+- Query some fields
+  > LIMIT will show only that many entries
+  ```sh
+  sqlite3 ./bank_transactions.db "SELECT transaction_date, amount, currency, merchant, reference_number FROM bank_transactions_alt limit 10"
+  ```
+
+## 3. Table union
 - Materialize the joined data into `bank_combined_data` (200 rows).
   ```sh
   sqlite3 bank_transactions.db "DROP TABLE IF EXISTS bank_combined_data;"
@@ -22,13 +33,13 @@ All commands assume we are in `/home/dk/code/SQL/table_union_view` and have `sql
   sqlite3 bank_transactions.db "SELECT COUNT(*) FROM bank_combined_data;"
   ```
 
-## 3. View creation
+## 4. View creation
 - Create the `bank_transactions_union_view` from the same union logic so downstream objects like `third_party` can query it safely.
   ```sh
   sqlite3 bank_transactions.db "CREATE VIEW IF NOT EXISTS bank_transactions_union_view AS SELECT * FROM bank_transactions UNION ALL SELECT * FROM bank_transactions_alt;"
   ```
 
-## `third_party` view
+## 4A: `third_party` view
 - Show the view definition:
   ```sh
   sqlite3 bank_transactions.db ".schema third_party"
@@ -51,7 +62,7 @@ All commands assume we are in `/home/dk/code/SQL/table_union_view` and have `sql
   EOF
   ```
 
-## `bank_transactions_union_view`
+## 4B: `bank_transactions_union_view`
 - Show its definition (union of both tables):
   ```sh
   sqlite3 bank_transactions.db ".schema bank_transactions_union_view"
